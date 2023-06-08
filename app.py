@@ -7,6 +7,7 @@ import cv2
 import os
 
 UPLOAD_FOLDER = r'static/images/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__, template_folder='templates')
 app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -22,14 +23,14 @@ def upload_files():
 
         aadhar = request.files['aadhar']
         filename = secure_filename(aadhar.filename)
-        aadhar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        aadhar.save(os.path.join(app.config['UPLOAD_FOLDER'], aadhar.filename))
         
         id_path = r'static/images/'+str(filename)
         #image_path = fr.my_img()
 
         image = request.files['image']
         filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        image.save(os.path.join(app.config['UPLOAD_FOLDER'], image.filename))
 
         image_path = r'static/images/'+str(filename)
 
@@ -57,7 +58,7 @@ def upload_files():
                 model_scores = fr.get_model_scores(my_adhar_encoding, my_image_encoding)
                 #face_distance = face_recognition.face_distance([my_adhar_encoding],my_image_encoding)
 
-                if cosine(model_scores[0], model_scores[1]) <= 0.45:
+                if cosine(model_scores[0], model_scores[1]) <= 0.5:
                     os.remove(image_path)
                     os.remove(id_path)
                     return "Congratulations !!! Your KYC is Completed !!! with distance of " + str(cosine(model_scores[0], model_scores[1]) )
