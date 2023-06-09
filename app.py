@@ -7,7 +7,7 @@ import cv2
 import os
 
 UPLOAD_FOLDER = r'static/images/'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 app = Flask(__name__, template_folder='templates')
 app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -23,16 +23,22 @@ def upload_files():
 
         aadhar = request.files['aadhar']
         filename = secure_filename(aadhar.filename)
-        aadhar.save(os.path.join(app.config['UPLOAD_FOLDER'], aadhar.filename))
-        
-        id_path = r'static/images/'+str(filename)
+        filename = str(filename).replace(" ",'')
+        if filename.split('.')[-1] in ALLOWED_EXTENSIONS:
+            aadhar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            id_path = r'static/images/'+str(filename)
+        else:
+            return "ID card file extention not allowed"
         #image_path = fr.my_img()
 
         image = request.files['image']
         filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], image.filename))
-
-        image_path = r'static/images/'+str(filename)
+        filename = str(filename).replace(" ",'')
+        if filename.split('.')[-1] in ALLOWED_EXTENSIONS:
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_path = r'static/images/'+str(filename)
+        else:
+            return "Image file extention not allowed"
 
         id_verify=fr.id_verification(id_path)
         if id_verify:
