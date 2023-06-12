@@ -38,8 +38,8 @@ def upload_files():
                 id_path = r'static/images/'+str(filename)
         else:
             return "ID card file extention not allowed"
-        image_path = fr.my_img()
-        """
+        #image_path = fr.my_img()
+        
         image = request.files['image']
         filename = secure_filename(image.filename)
         filename = str(filename).replace(" ",'')
@@ -56,7 +56,7 @@ def upload_files():
                 image_path = r'static/images/'+str(filename)
         else:
             return "Image file extention not allowed"
-        """
+        
         id_verify=fr.id_verification(id_path)
         if id_verify:
             frame, status1=fr.face_detect(id_path)
