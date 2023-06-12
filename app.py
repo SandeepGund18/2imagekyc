@@ -36,7 +36,6 @@ def upload_files():
                 id_path = r'static/images/'+str(jpg_file_path)
             else:
                 id_path = r'static/images/'+str(filename)
-            #id_path = r'static/images/'+str(filename)
         else:
             return "ID card file extention not allowed"
         #image_path = fr.my_img()
@@ -60,7 +59,6 @@ def upload_files():
 
         id_verify=fr.id_verification(id_path)
         if id_verify:
-            #print(id_verify)
             frame, status1=fr.face_detect(id_path)
             if status1:
                 #adhar_picture = face_recognition.load_image_file(id_path)
