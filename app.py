@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from scipy.spatial.distance import cosine
 import cv2
 import os
+from PIL import Image
 
 UPLOAD_FOLDER = r'static/images/'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
@@ -26,7 +27,16 @@ def upload_files():
         filename = str(filename).replace(" ",'')
         if filename.split('.')[-1] in ALLOWED_EXTENSIONS:
             aadhar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            id_path = r'static/images/'+str(filename)
+            if filename.split('.')[-1] == "png":
+                jpg_file_path = filename[:-3] + "jpg"
+                aadhar_path = r'static/images/'+str(filename)
+                im = Image.open(aadhar_path)
+                im.convert('RGB').save(os.path.join(app.config['UPLOAD_FOLDER'], jpg_file_path),"JPEG")
+                os.remove(aadhar_path)
+                id_path = r'static/images/'+str(jpg_file_path)
+            else:
+                id_path = r'static/images/'+str(filename)
+            #id_path = r'static/images/'+str(filename)
         else:
             return "ID card file extention not allowed"
         #image_path = fr.my_img()
@@ -36,7 +46,15 @@ def upload_files():
         filename = str(filename).replace(" ",'')
         if filename.split('.')[-1] in ALLOWED_EXTENSIONS:
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            image_path = r'static/images/'+str(filename)
+            if filename.split('.')[-1] == "png":
+                jpg_file_path = filename[:-3] + "jpg"
+                image_path = r'static/images/'+str(filename)
+                im = Image.open(image_path)
+                im.convert('RGB').save(os.path.join(app.config['UPLOAD_FOLDER'], jpg_file_path),"JPEG")
+                os.remove(image_path)
+                image_path = r'static/images/'+str(jpg_file_path)
+            else:
+                image_path = r'static/images/'+str(filename)
         else:
             return "Image file extention not allowed"
 
